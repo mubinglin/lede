@@ -54,7 +54,9 @@ jobs:
           ./scripts/feeds install -a
 
       - name: Generate configuration file
-        run: make defconfig
+        run: |
+          rm -f ./.config*
+          touch ./.config
     
           
           
@@ -200,8 +202,9 @@ jobs:
           # ========================固件定制部分结束========================
           # 
           
+          sed -i 's/^[ \t]*//g' ./.config
+          make defconfig
           
-
       - name: Make download
         run: |
           make download -j8
@@ -255,7 +258,7 @@ jobs:
           repo_token: ${{ secrets.YOURTOKEN }}
           file: ./artifact/firmware/*
           tag: ${{ github.ref }}
-          file_glob: true: 
+          file_glob: true
   
 
       
